@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carreras PR 2026 — 5K · 10K · 21K</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F5F0;
+    --surface: #FFFFFF;
+    --border: #E2DED6;
+    --text: #1A1816;
+    --muted: #7A776F;
+    --accent: #C84B1F;
+    --accent-light: #FCF0EB;
+    --c5k: #1B5E3B;
+    --c5k-bg: #E6F4EC;
+    --c10k: #1A4A7A;
+    --c10k-bg: #E6EFF8;
+    --c21k: #6B2D8B;
+    --c21k-bg: #F2EAF8;
+    --past: 0.38;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 4rem;
+  }
+
+  header {
+    padding: 3rem 2rem 2rem;
+    max-width: 780px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: .6rem;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: .5rem;
+  }
+
+  .sub {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .filters {
+    max-width: 780px;
+    margin: 0 auto 2rem;
+    padding: 0 2rem;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filters label {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-right: 4px;
+  }
+
+  .pill {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 99px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .pill:hover { border-color: #bbb; color: var(--text); }
+  .pill.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .month-section { margin-bottom: 2.5rem; }
+
+  .month-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .month-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .race-link {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition: border-color .15s, transform .1s;
+  }
+  .race-link:hover { border-color: #bbb; transform: translateY(-1px); }
+  .race-link.past { opacity: var(--past); pointer-events: none; }
+
+  .date-col {
+    min-width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 12px;
+    border-right: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .date-day {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--text);
+  }
+  .date-mon {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .info-col {
+    flex: 1;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .race-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .race-meta {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .race-meta svg { flex-shrink: 0; }
+
+  .tags-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px 14px;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .tag-5k  { background: var(--c5k-bg);  color: var(--c5k); }
+  .tag-10k { background: var(--c10k-bg); color: var(--c10k); }
+  .tag-21k { background: var(--c21k-bg); color: var(--c21k); }
+
+  .arrow-col {
+    display: flex;
+    align-items: center;
+    padding: 0 12px 0 4px;
+    color: var(--border);
+    font-size: 16px;
+  }
+
+  .empty-msg {
+    text-align: center;
+    padding: 3rem;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .legend {
+    max-width: 780px;
+    margin: 0 auto 1.5rem;
+    padding: 0 2rem;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  footer {
+    max-width: 780px;
+    margin: 3rem auto 0;
+    padding: 1.5rem 2rem 0;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 500px) {
+    header, .filters, main, .legend, footer { padding-left: 1rem; padding-right: 1rem; }
+    .race-name { font-size: 13px; }
+    .tags-col { padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Puerto Rico · 2026</div>
+  <h1>Carreras 5K · 10K · 21K</h1>
+  <p class="sub">Calendario de carreras pedestres por fecha y municipio. Haz clic en cualquier evento para ver información e inscripción.</p>
+</header>
+
+<div class="filters">
+  <label>Distancia:</label>
+  <button class="pill active" data-filter="all">Todas</button>
+  <button class="pill" data-filter="5k">5K</button>
+  <button class="pill" data-filter="10k">10K</button>
+  <button class="pill" data-filter="21k">21K</button>
+</div>
+
+<div class="legend">
+  <span class="legend-item"><span class="tag tag-5k">5K</span></span>
+  <span class="legend-item"><span class="tag tag-10k">10K</span></span>
+  <span class="legend-item"><span class="tag tag-21k">21K</span></span>
+  <span class="legend-item" style="margin-left:8px; opacity:.5">— Evento pasado</span>
+</div>
+
+<main id="calendar"></main>
+
+<footer>
+  Fuentes: <a href="https://maratonespr.com/?page_id=1716" target="_blank">maratonespr.com</a> · <a href="https://micarrerapr.com/events" target="_blank">micarrerapr.com</a> · <a href="https://www.xterraplanet.com/event/xterra-puerto-rico" target="_blank">XTERRA Puerto Rico</a> · <a href="https://www.lolachallenge.com/events" target="_blank">Lola Challenge</a> · <a href="https://www.elnuevodia.com/estilos-de-vida/nutricion-y-ejercicios/notas/a-correr-en-junio-estas-son-los-eventos-de-carreras-5k-y-10k-para-este-mes/" target="_blank">El Nuevo Día</a><br>
+  Calendario actualizado al 14 de junio de 2026. Algunos eventos pueden haber cambiado. Verifica siempre con el organizador.
+</footer>
+
+<script>
+const races = [
+  { day:24, month:"Ene", monthFull:"Enero 2026",   name:"5K Río Piedras",                   muni:"Río Piedras, San Juan",    types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
+  { day:21, month:"Feb", monthFull:"Febrero 2026",  name:"5K Dorado",                         muni:"Dorado",                   types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
+  { day:22, month:"Feb", monthFull:"Febrero 2026",  name:"5K & 10K Llanero: Ruta del Encanto",muni:"Toa Baja",                 types:["5k","10k"], past:true,  url:"https://findarace.com/us/events/10k-5k-llanero" },
+  { day:22, month:"Feb", monthFull:"Febrero 2026",  name:"5K Aguadilla",                      muni:"Aguadilla",                types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
+  { day:14, month:"Mar", monthFull:"Marzo 2026",    name:"5K Río Piedras",                    muni:"Río Piedras, San Juan",    types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
+  { day:28, month:"Mar", monthFull:"Marzo 2026",    name:"5K San Juan",                       muni:"San Juan",                 types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
+  { day:18, month:"Abr", monthFull:"Abril 2026",    name:"XTERRA 10K Trail Run",              muni:"Cabo Rojo",                types:["10k"],      past:true,  url:"https://www.xterraplanet.com/event/xterra-puerto-rico" },
+  { day:18, month:"Abr", monthFull:"Abril 2026",    name:"XTERRA Trail Half Marathon 21K",    muni:"Cabo Rojo",                types:["21k"],      past:true,  url:"https://www.xterraplanet.com/event/xterra-puerto-rico" },
+  { day:18, month:"Abr", monthFull:"Abril 2026",    name:"5K Carolina",                       muni:"Carolina",                 types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
+  { day:7,  month:"Jun", monthFull:"Junio 2026",    name:"Run for Joy 5K",                    muni:"Toa Baja (Sabana Seca)",   types:["5k"],       past:true,  url:"https://running.life/en/event/run-for-joy-5k" },
+  { day:14, month:"Jun", monthFull:"Junio 2026",    name:"5K UNAMGU",                         muni:"Aguada",                   types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-unamgu-aguada" },
+  { day:14, month:"Jun", monthFull:"Junio 2026",    name:"5K San Antonio",                    muni:"Caguas (Bairoa)",          types:["5k"],       past:false, url:"https://running.life/en/event/5k-san-antonio" },
+  { day:17, month:"Jun", monthFull:"Junio 2026",    name:"Fun Run 5K Playero",                muni:"Añasco",                   types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=fun-run-5k-playero-anasco" },
+  { day:20, month:"Jun", monthFull:"Junio 2026",    name:"5K La Metro Run Club",              muni:"Canóvanas",                types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-la-metro-run-club-canovanas" },
+  { day:27, month:"Jun", monthFull:"Junio 2026",    name:"5K Cada Paso por la Familia",       muni:"San Juan",                 types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-cada-paso-por-la-familia" },
+  { day:27, month:"Jun", monthFull:"Junio 2026",    name:"10K San Juan Bautista",             muni:"Maricao",                  types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-san-juan-bautista-maricao" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"5K Festival Turístico",             muni:"Las Marías",               types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-festival-turistico-las-marias" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"10K San Juan Bautista",             muni:"Orocovis",                 types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-san-juan-bautista-orocovis" },
+  { day:12, month:"Jul", monthFull:"Julio 2026",    name:"5K Centro Buen Pastor",             muni:"Caguas",                   types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-centro-buen-pastor-caguas" },
+  { day:18, month:"Jul", monthFull:"Julio 2026",    name:"5K Muñoz Rivera",                   muni:"Barranquitas",             types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-munoz-rivera-barranquitas" },
+  { day:19, month:"Jul", monthFull:"Julio 2026",    name:"5K National Guard",                 muni:"Toa Baja",                 types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-national-guard-toa-baja" },
+  { day:2,  month:"Ago", monthFull:"Agosto 2026",   name:"10K & 5K El Seco",                  muni:"Comerío",                  types:["5k","10k"], past:false, url:"https://maratonespr.com/?tribe_events=10k-5k-el-seco-comerio" },
+  { day:9,  month:"Ago", monthFull:"Agosto 2026",   name:"10K Nicasio Olmo",                  muni:"Arecibo",                  types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-nicasio-olmo-arecibo" },
+  { day:16, month:"Ago", monthFull:"Agosto 2026",   name:"5K De La Longa",                    muni:"Orocovis",                 types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-de-la-longa-orocovis" },
+  { day:6,  month:"Sep", monthFull:"Septiembre 2026",name:"5K por la Salud Sexual",           muni:"San Juan",                 types:["5k"],       past:false, url:"https://running.life/en/event/5k-por-la-salud-sexual" },
+  { day:4,  month:"Oct", monthFull:"Octubre 2026",  name:"Race for the Cure",                 muni:"San Juan",                 types:["5k"],       past:false, url:"https://running.life/en/event/race-for-the-cure-san-juan" },
+  { day:11, month:"Oct", monthFull:"Octubre 2026",  name:"58va Edición Medio Maratón de PR",  muni:"Villalba",                 types:["21k"],      past:false, url:"https://micarrerapr.com/events/2026-10-11-58va-edicion-medio-maraton-de-puerto-rico" },
+  { day:6,  month:"Nov", monthFull:"Noviembre 2026",name:"Lola Challenge 5K",                 muni:"San Juan (Viejo San Juan)", types:["5k"],      past:false, url:"https://www.lolachallenge.com/events" },
+  { day:7,  month:"Nov", monthFull:"Noviembre 2026",name:"Lola Challenge 10K",                muni:"San Juan (Viejo San Juan)", types:["10k"],     past:false, url:"https://www.lolachallenge.com/events" },
+  { day:8,  month:"Nov", monthFull:"Noviembre 2026",name:"Lola Challenge 21K (Half Marathon)",muni:"San Juan (Viejo San Juan)", types:["21k"],     past:false, url:"https://www.lolachallenge.com/events" },
+  { day:6,  month:"Dic", monthFull:"Diciembre 2026",name:"5K de ESCAPE – Parranda Run",       muni:"Caguas",                   types:["5k"],       past:false, url:"https://running.life/en/event/5k-de-escape-parranda-run" },
+  { day:27, month:"Dic", monthFull:"Diciembre 2026",name:"10K San Silvestre Puerto Rico",      muni:"San Juan",                 types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-san-silvestre-puerto-rico-san-juan" },
+];
+
+let active = "all";
+
+function pin() {
+  return `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+}
+
+function render() {
+  const filtered = races.filter(r => active === "all" || r.types.includes(active));
+  const groups = {};
+  filtered.forEach(r => {
+    if (!groups[r.monthFull]) groups[r.monthFull] = [];
+    groups[r.monthFull].push(r);
+  });
+
+  const cal = document.getElementById("calendar");
+  if (!filtered.length) {
+    cal.innerHTML = `<div class="empty-msg">No hay carreras para este filtro.</div>`;
+    return;
+  }
+
+  cal.innerHTML = Object.entries(groups).map(([month, rs]) => `
+    <div class="month-section" data-month="${month}">
+      <div class="month-header">${month}</div>
+      ${rs.map(r => `
+        <a class="race-link${r.past ? " past" : ""}" href="${r.url}" target="_blank" rel="noopener">
+          <div class="date-col">
+            <span class="date-day">${r.day}</span>
+            <span class="date-mon">${r.month}</span>
+          </div>
+          <div class="info-col">
+            <div class="race-name">${r.name}</div>
+            <div class="race-meta">${pin()} ${r.muni}</div>
+          </div>
+          <div class="tags-col">
+            ${r.types.map(t => `<span class="tag tag-${t}">${t.toUpperCase()}</span>`).join("")}
+          </div>
+          <div class="arrow-col">›</div>
+        </a>
+      `).join("")}
+    </div>
+  `).join("");
+}
+
+document.querySelector(".filters").addEventListener("click", e => {
+  const btn = e.target.closest(".pill");
+  if (!btn) return;
+  active = btn.dataset.filter;
+  document.querySelectorAll(".pill").forEach(b => b.classList.toggle("active", b === btn));
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
