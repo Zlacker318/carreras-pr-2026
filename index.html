@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carreras PR 2026 — 5K · 10K · 21K</title>
+<title>Carreras PR 2026 — 5K · 10K · 21K · Duatlón · Triatlón</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,7 +22,10 @@
     --c10k-bg: #E6EFF8;
     --c21k: #6B2D8B;
     --c21k-bg: #F2EAF8;
-    --past: 0.38;
+    --cdu: #8B5E00;
+    --cdu-bg: #FFF3DC;
+    --ctri: #0E6B6B;
+    --ctri-bg: #E0F4F4;
   }
 
   body {
@@ -135,7 +138,6 @@
     transition: border-color .15s, transform .1s;
   }
   .race-link:hover { border-color: #bbb; transform: translateY(-1px); }
-  .race-link.past { opacity: var(--past); pointer-events: none; }
 
   .date-col {
     min-width: 60px;
@@ -210,6 +212,8 @@
   .tag-5k  { background: var(--c5k-bg);  color: var(--c5k); }
   .tag-10k { background: var(--c10k-bg); color: var(--c10k); }
   .tag-21k { background: var(--c21k-bg); color: var(--c21k); }
+  .tag-du  { background: var(--cdu-bg);  color: var(--cdu); }
+  .tag-tri { background: var(--ctri-bg); color: var(--ctri); }
 
   .arrow-col {
     display: flex;
@@ -266,7 +270,7 @@
 
 <header>
   <div class="eyebrow">Puerto Rico · 2026</div>
-  <h1>Carreras 5K · 10K · 21K</h1>
+  <h1>Carreras 5K · 10K · 21K · Duatlón · Triatlón</h1>
   <p class="sub">Calendario de carreras pedestres por fecha y municipio. Haz clic en cualquier evento para ver información e inscripción.</p>
 </header>
 
@@ -276,56 +280,134 @@
   <button class="pill" data-filter="5k">5K</button>
   <button class="pill" data-filter="10k">10K</button>
   <button class="pill" data-filter="21k">21K</button>
+  <button class="pill" data-filter="du">Duatlón</button>
+  <button class="pill" data-filter="tri">Triatlón</button>
 </div>
 
 <div class="legend">
   <span class="legend-item"><span class="tag tag-5k">5K</span></span>
   <span class="legend-item"><span class="tag tag-10k">10K</span></span>
   <span class="legend-item"><span class="tag tag-21k">21K</span></span>
-  <span class="legend-item" style="margin-left:8px; opacity:.5">— Evento pasado</span>
+  <span class="legend-item"><span class="tag tag-du">DU</span></span>
+  <span class="legend-item"><span class="tag tag-tri">TRI</span></span>
 </div>
 
 <main id="calendar"></main>
 
 <footer>
-  Fuentes: <a href="https://maratonespr.com/?page_id=1716" target="_blank">maratonespr.com</a> · <a href="https://micarrerapr.com/events" target="_blank">micarrerapr.com</a> · <a href="https://www.xterraplanet.com/event/xterra-puerto-rico" target="_blank">XTERRA Puerto Rico</a> · <a href="https://www.lolachallenge.com/events" target="_blank">Lola Challenge</a> · <a href="https://www.elnuevodia.com/estilos-de-vida/nutricion-y-ejercicios/notas/a-correr-en-junio-estas-son-los-eventos-de-carreras-5k-y-10k-para-este-mes/" target="_blank">El Nuevo Día</a><br>
-  Calendario actualizado al 14 de junio de 2026. Algunos eventos pueden haber cambiado. Verifica siempre con el organizador.
+  Fuentes: <a href="https://maratonespr.com/?page_id=1716" target="_blank">maratonespr.com</a> · <a href="https://micarrerapr.com/events" target="_blank">micarrerapr.com</a> · <a href="https://www.xterraplanet.com/event/xterra-puerto-rico" target="_blank">XTERRA Puerto Rico</a> · <a href="https://www.ironman.com/im703-puerto-rico" target="_blank">IRONMAN 70.3 PR</a> · <a href="https://www.lolachallenge.com/events" target="_blank">Lola Challenge</a> · <a href="https://www.elnuevodia.com/estilos-de-vida/nutricion-y-ejercicios/notas/a-correr-en-junio-estas-son-los-eventos-de-carreras-5k-y-10k-para-este-mes/" target="_blank">El Nuevo Día</a><br>
+  Calendario actualizado al 14 de junio de 2026. Incluye eventos de múltiples fuentes — algunos pueden haber cambiado. Verifica siempre con el organizador.
 </footer>
 
 <script>
 const races = [
-  { day:24, month:"Ene", monthFull:"Enero 2026",   name:"5K Río Piedras",                   muni:"Río Piedras, San Juan",    types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
-  { day:21, month:"Feb", monthFull:"Febrero 2026",  name:"5K Dorado",                         muni:"Dorado",                   types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
-  { day:22, month:"Feb", monthFull:"Febrero 2026",  name:"5K & 10K Llanero: Ruta del Encanto",muni:"Toa Baja",                 types:["5k","10k"], past:true,  url:"https://findarace.com/us/events/10k-5k-llanero" },
-  { day:22, month:"Feb", monthFull:"Febrero 2026",  name:"5K Aguadilla",                      muni:"Aguadilla",                types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
-  { day:14, month:"Mar", monthFull:"Marzo 2026",    name:"5K Río Piedras",                    muni:"Río Piedras, San Juan",    types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
-  { day:28, month:"Mar", monthFull:"Marzo 2026",    name:"5K San Juan",                       muni:"San Juan",                 types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
-  { day:18, month:"Abr", monthFull:"Abril 2026",    name:"XTERRA 10K Trail Run",              muni:"Cabo Rojo",                types:["10k"],      past:true,  url:"https://www.xterraplanet.com/event/xterra-puerto-rico" },
-  { day:18, month:"Abr", monthFull:"Abril 2026",    name:"XTERRA Trail Half Marathon 21K",    muni:"Cabo Rojo",                types:["21k"],      past:true,  url:"https://www.xterraplanet.com/event/xterra-puerto-rico" },
-  { day:18, month:"Abr", monthFull:"Abril 2026",    name:"5K Carolina",                       muni:"Carolina",                 types:["5k"],       past:true,  url:"https://maratonespr.com/?page_id=1716" },
-  { day:7,  month:"Jun", monthFull:"Junio 2026",    name:"Run for Joy 5K",                    muni:"Toa Baja (Sabana Seca)",   types:["5k"],       past:true,  url:"https://running.life/en/event/run-for-joy-5k" },
-  { day:14, month:"Jun", monthFull:"Junio 2026",    name:"5K UNAMGU",                         muni:"Aguada",                   types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-unamgu-aguada" },
-  { day:14, month:"Jun", monthFull:"Junio 2026",    name:"5K San Antonio",                    muni:"Caguas (Bairoa)",          types:["5k"],       past:false, url:"https://running.life/en/event/5k-san-antonio" },
-  { day:17, month:"Jun", monthFull:"Junio 2026",    name:"Fun Run 5K Playero",                muni:"Añasco",                   types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=fun-run-5k-playero-anasco" },
-  { day:20, month:"Jun", monthFull:"Junio 2026",    name:"5K La Metro Run Club",              muni:"Canóvanas",                types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-la-metro-run-club-canovanas" },
-  { day:27, month:"Jun", monthFull:"Junio 2026",    name:"5K Cada Paso por la Familia",       muni:"San Juan",                 types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-cada-paso-por-la-familia" },
-  { day:27, month:"Jun", monthFull:"Junio 2026",    name:"10K San Juan Bautista",             muni:"Maricao",                  types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-san-juan-bautista-maricao" },
-  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"5K Festival Turístico",             muni:"Las Marías",               types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-festival-turistico-las-marias" },
-  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"10K San Juan Bautista",             muni:"Orocovis",                 types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-san-juan-bautista-orocovis" },
-  { day:12, month:"Jul", monthFull:"Julio 2026",    name:"5K Centro Buen Pastor",             muni:"Caguas",                   types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-centro-buen-pastor-caguas" },
-  { day:18, month:"Jul", monthFull:"Julio 2026",    name:"5K Muñoz Rivera",                   muni:"Barranquitas",             types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-munoz-rivera-barranquitas" },
-  { day:19, month:"Jul", monthFull:"Julio 2026",    name:"5K National Guard",                 muni:"Toa Baja",                 types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-national-guard-toa-baja" },
-  { day:2,  month:"Ago", monthFull:"Agosto 2026",   name:"10K & 5K El Seco",                  muni:"Comerío",                  types:["5k","10k"], past:false, url:"https://maratonespr.com/?tribe_events=10k-5k-el-seco-comerio" },
-  { day:9,  month:"Ago", monthFull:"Agosto 2026",   name:"10K Nicasio Olmo",                  muni:"Arecibo",                  types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-nicasio-olmo-arecibo" },
-  { day:16, month:"Ago", monthFull:"Agosto 2026",   name:"5K De La Longa",                    muni:"Orocovis",                 types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-de-la-longa-orocovis" },
-  { day:6,  month:"Sep", monthFull:"Septiembre 2026",name:"5K por la Salud Sexual",           muni:"San Juan",                 types:["5k"],       past:false, url:"https://running.life/en/event/5k-por-la-salud-sexual" },
-  { day:4,  month:"Oct", monthFull:"Octubre 2026",  name:"Race for the Cure",                 muni:"San Juan",                 types:["5k"],       past:false, url:"https://running.life/en/event/race-for-the-cure-san-juan" },
-  { day:11, month:"Oct", monthFull:"Octubre 2026",  name:"58va Edición Medio Maratón de PR",  muni:"Villalba",                 types:["21k"],      past:false, url:"https://micarrerapr.com/events/2026-10-11-58va-edicion-medio-maraton-de-puerto-rico" },
-  { day:6,  month:"Nov", monthFull:"Noviembre 2026",name:"Lola Challenge 5K",                 muni:"San Juan (Viejo San Juan)", types:["5k"],      past:false, url:"https://www.lolachallenge.com/events" },
-  { day:7,  month:"Nov", monthFull:"Noviembre 2026",name:"Lola Challenge 10K",                muni:"San Juan (Viejo San Juan)", types:["10k"],     past:false, url:"https://www.lolachallenge.com/events" },
-  { day:8,  month:"Nov", monthFull:"Noviembre 2026",name:"Lola Challenge 21K (Half Marathon)",muni:"San Juan (Viejo San Juan)", types:["21k"],     past:false, url:"https://www.lolachallenge.com/events" },
-  { day:6,  month:"Dic", monthFull:"Diciembre 2026",name:"5K de ESCAPE – Parranda Run",       muni:"Caguas",                   types:["5k"],       past:false, url:"https://running.life/en/event/5k-de-escape-parranda-run" },
-  { day:27, month:"Dic", monthFull:"Diciembre 2026",name:"10K San Silvestre Puerto Rico",      muni:"San Juan",                 types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-san-silvestre-puerto-rico-san-juan" },
+  // — Junio 2026 —
+  { day:17, month:"Jun", monthFull:"Junio 2026",    name:"Fun Run 5K Playero",                     muni:"Añasco",                    types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=fun-run-5k-playero-anasco" },
+  { day:20, month:"Jun", monthFull:"Junio 2026",    name:"5K La Metro Run Club",                   muni:"Canóvanas",                 types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-06-20-5k-la-metro-run-club" },
+  { day:20, month:"Jun", monthFull:"Junio 2026",    name:"Fire Up 5K 2026",                        muni:"Salinas",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-06-20-fire-up-5k-2026" },
+  { day:27, month:"Jun", monthFull:"Junio 2026",    name:"5K Cada Paso por la Familia",            muni:"San Juan",                  types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-cada-paso-por-la-familia" },
+  { day:27, month:"Jun", monthFull:"Junio 2026",    name:"5K JRun – Juventud Raudal",              muni:"Vega Baja",                 types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-06-27-5k-jrun-juventud-raudal" },
+  { day:27, month:"Jun", monthFull:"Junio 2026",    name:"5K Cabecitas de Oro",                    muni:"Adjuntas",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-04-18-5k-cabecitas-de-oro" },
+  { day:27, month:"Jun", monthFull:"Junio 2026",    name:"10K San Juan Bautista",                  muni:"Maricao",                   types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-san-juan-bautista-maricao" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"5K Festival Turístico",                  muni:"Las Marías",                types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-festival-turistico-las-marias" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"10K San Juan Bautista",                  muni:"Orocovis",                  types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-san-juan-bautista-orocovis" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"10K San Juan Bautista 2026",             muni:"San Juan",                  types:["10k"],      past:false, url:"https://micarrerapr.com/events/2026-06-28-10k-san-juan-bautista-2026" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"5K Por los Niños Sobrevivientes",        muni:"Caguas",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-06-28-5k-por-los-ninos-sobrevivientes-de-maltrato" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"5K Valerosos 2026",                      muni:"Canóvanas",                 types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-06-28-5k-valerosos-2026" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"La Isla Run Trip: 5K Aguadilla",         muni:"Aguadilla",                 types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-06-28-la-isla-run-trip-5k-aguadilla-race-2" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"Dúalo PR – Summer Edition",              muni:"Vega Baja",                 types:["du"],       past:false, url:"https://micarrerapr.com/events/2026-06-28-dualo-pr-summer-edition" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"5K Balseada de Camuy 2026",              muni:"Camuy",                     types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-06-28-5k-balseada-de-camuy-2026" },
+  { day:28, month:"Jun", monthFull:"Junio 2026",    name:"5K Roberto Espada 2026",                 muni:"Salinas",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-06-28-5k-roberto-espada-2026" },
+  // — Julio 2026 —
+  { day:4,  month:"Jul", monthFull:"Julio 2026",    name:"5K Fundación Gestos Positivos",          muni:"Río Grande",                types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-07-04-5k-fundacion-gestos-positivos" },
+  { day:5,  month:"Jul", monthFull:"Julio 2026",    name:"Dúalo Salinense MTB – 1ra Edición",      muni:"Salinas",                   types:["du"],       past:false, url:"https://micarrerapr.com/events/2026-07-05-1ra-edicion-dualo-salinense-mtb" },
+  { day:5,  month:"Jul", monthFull:"Julio 2026",    name:"5K Carrera Playa el Faro",               muni:"Arroyo",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-07-05-5k-carrera-playa-el-faro" },
+  { day:11, month:"Jul", monthFull:"Julio 2026",    name:"5K Aguas Termales 2026",                 muni:"Coamo",                     types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-07-18-5k-aguas-termales-2026" },
+  { day:11, month:"Jul", monthFull:"Julio 2026",    name:"10K del Carmen 2026",                    muni:"Hatillo",                   types:["10k"],      past:false, url:"https://micarrerapr.com/events/2026-07-11-10k-del-carmen-2026" },
+  { day:12, month:"Jul", monthFull:"Julio 2026",    name:"5K Centro Buen Pastor",                  muni:"Caguas",                    types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-centro-buen-pastor-caguas" },
+  { day:12, month:"Jul", monthFull:"Julio 2026",    name:"5K Survivor Cancer 2026",                muni:"San Juan",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-07-12-5k-survivor-cancer-2026" },
+  { day:12, month:"Jul", monthFull:"Julio 2026",    name:"5K CIES Puerto Rico",                    muni:"Mayagüez",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-07-12-5k-cies-puerto-rico" },
+  { day:18, month:"Jul", monthFull:"Julio 2026",    name:"5K Muñoz Rivera",                        muni:"Barranquitas",              types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-munoz-rivera-barranquitas" },
+  { day:19, month:"Jul", monthFull:"Julio 2026",    name:"5K National Guard",                      muni:"Toa Baja",                  types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-national-guard-toa-baja" },
+  { day:19, month:"Jul", monthFull:"Julio 2026",    name:"10K Festival del Mojo Isleño 2026",      muni:"Salinas",                   types:["10k"],      past:false, url:"https://micarrerapr.com/events/2026-07-19-10k-festival-del-mojo-isleno-2026" },
+  { day:19, month:"Jul", monthFull:"Julio 2026",    name:"La Carrera de la Fe 5K",                 muni:"Luquillo",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-07-19-la-carrera-de-la-fe-5k" },
+  { day:25, month:"Jul", monthFull:"Julio 2026",    name:"10K La Constitución – Edición 40",       muni:"Santa Isabel",              types:["10k"],      past:false, url:"https://micarrerapr.com/events/2026-07-25-10k-la-constitucion-edicion-40" },
+  { day:26, month:"Jul", monthFull:"Julio 2026",    name:"5K Iglesia SAL",                         muni:"Luquillo",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-07-26-5k-iglesia-sal" },
+  { day:26, month:"Jul", monthFull:"Julio 2026",    name:"5K Running VIP – El Tony de Corozal",    muni:"Corozal",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-07-26-5k-running-vip-el-tony-de-corozal" },
+  { day:26, month:"Jul", monthFull:"Julio 2026",    name:"5K Pachanga Fest",                       muni:"Dorado",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-07-26-5k-pachanga-fest" },
+  // — Agosto 2026 —
+  { day:1,  month:"Ago", monthFull:"Agosto 2026",   name:"5K Acrosport",                           muni:"Hatillo",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-08-01-5k-acrosport" },
+  { day:2,  month:"Ago", monthFull:"Agosto 2026",   name:"10K & 5K El Seco",                       muni:"Comerío",                   types:["5k","10k"], past:false, url:"https://maratonespr.com/?tribe_events=10k-5k-el-seco-comerio" },
+  { day:2,  month:"Ago", monthFull:"Agosto 2026",   name:"5K por la Salud 2026",                   muni:"San Juan",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-08-02-5k-por-la-salud-2026" },
+  { day:2,  month:"Ago", monthFull:"Agosto 2026",   name:"La Isla Run Trip: 10K Canóvanas",        muni:"Canóvanas",                 types:["10k"],      past:false, url:"https://micarrerapr.com/events/2026-07-26-la-isla-run-trip-10k-canovanas" },
+  { day:2,  month:"Ago", monthFull:"Agosto 2026",   name:"5K Hunga Maldonado",                     muni:"Villalba",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-08-02-5k-hunga-maldonado" },
+  { day:2,  month:"Ago", monthFull:"Agosto 2026",   name:"5K Parranda los Nietos de Papá",         muni:"San Sebastián",             types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-08-02-5k-parranda-los-nietos-de-papa" },
+  { day:9,  month:"Ago", monthFull:"Agosto 2026",   name:"10K Nicasio Olmo",                       muni:"Arecibo",                   types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-nicasio-olmo-arecibo" },
+  { day:15, month:"Ago", monthFull:"Agosto 2026",   name:"5K Coquí Dorado 2026",                   muni:"Cayey",                     types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-08-15-5k-coqui-dorado-2026" },
+  { day:16, month:"Ago", monthFull:"Agosto 2026",   name:"5K De La Longa",                         muni:"Orocovis",                  types:["5k"],       past:false, url:"https://maratonespr.com/?tribe_events=5k-de-la-longa-orocovis" },
+  { day:16, month:"Ago", monthFull:"Agosto 2026",   name:"1er 5K Colegio Perpetuo Socorro",        muni:"Salinas",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-08-16-1er-5k-colegio-perpetuo-socorro" },
+  { day:22, month:"Ago", monthFull:"Agosto 2026",   name:"Trialfesta 21K 2026",                    muni:"Bayamón",                   types:["21k"],      past:false, url:"https://micarrerapr.com/events/2026-08-22-trialfesta-21k-2026" },
+  { day:23, month:"Ago", monthFull:"Agosto 2026",   name:"5K Pabellón de la Fama y Del Deporte",   muni:"Santa Isabel",              types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-08-23-5k-pabellon-de-la-fama-y-del-deporte" },
+  { day:23, month:"Ago", monthFull:"Agosto 2026",   name:"5K Tiburones de Aguadilla",              muni:"Aguadilla",                 types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-08-23-corre-o-caminalo-con-sharky-5k-tiburones-de-aguadilla" },
+  { day:23, month:"Ago", monthFull:"Agosto 2026",   name:"5K Knockout Cancer",                     muni:"Fajardo",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-08-23-3ra-edicion-5k-knockout-cancer" },
+  { day:30, month:"Ago", monthFull:"Agosto 2026",   name:"5K Río Blanco – La Ruta Más Fresca",     muni:"Naguabo",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-08-30-5k-rio-blanco-la-ruta-mas-fresca-2026" },
+  // — Septiembre 2026 —
+  { day:5,  month:"Sep", monthFull:"Septiembre 2026",name:"5K Pastoreo Fun Fest",                  muni:"Dorado",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-09-05-5k-pastoreo-fun-fest" },
+  { day:5,  month:"Sep", monthFull:"Septiembre 2026",name:"Run and Fly 5K",                        muni:"Fajardo",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-09-05-run-and-fly-5k" },
+  { day:6,  month:"Sep", monthFull:"Septiembre 2026",name:"5K por la Salud Sexual",                muni:"San Juan",                  types:["5k"],       past:false, url:"https://running.life/en/event/5k-por-la-salud-sexual" },
+  { day:6,  month:"Sep", monthFull:"Septiembre 2026",name:"5K Pisando Fuerte",                     muni:"Aguadilla",                 types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-09-06-5k-pisando-fuerte" },
+  { day:6,  month:"Sep", monthFull:"Septiembre 2026",name:"5K Por Ti 2026",                        muni:"Toa Baja",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-09-06-5k-por-ti-2026" },
+  { day:6,  month:"Sep", monthFull:"Septiembre 2026",name:"5K Fundación Freddo Vega",              muni:"Salinas",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-09-06-5k-fundacion-freddo-vega" },
+  { day:12, month:"Sep", monthFull:"Septiembre 2026",name:"5K Transformando Vidas 2026",           muni:"Caguas",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-09-12-5k-transformando-vidas-2026" },
+  { day:12, month:"Sep", monthFull:"Septiembre 2026",name:"5K de los Abuelos",                     muni:"Mayagüez",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-09-12-2da-edicion-5k-de-los-abuelos" },
+  { day:13, month:"Sep", monthFull:"Septiembre 2026",name:"5K Fundación Becas, Pasión y Logros",   muni:"Guayama",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-06-07-5k-fundacion-becas-pasion-y-logros-2026" },
+  { day:13, month:"Sep", monthFull:"Septiembre 2026",name:"11mo Dúalo Valerosos",                  muni:"Ciales",                    types:["du"],       past:false, url:"https://micarrerapr.com/events/2026-09-13-11mo-dualo-valerosos" },
+  { day:19, month:"Sep", monthFull:"Septiembre 2026",name:"La Ola 5K 2026",                        muni:"Fajardo",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-09-19-la-ola-5k-2026" },
+  { day:20, month:"Sep", monthFull:"Septiembre 2026",name:"5K Run/Walk Iglesia Evangélica",        muni:"Caguas",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-09-20-5k-runwalk-iglesia-evangelica-de-caguas" },
+  { day:27, month:"Sep", monthFull:"Septiembre 2026",name:"5K Construye Tu Ruta",                  muni:"San Juan",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-05-17-5k-construye-tu-ruta" },
+  { day:27, month:"Sep", monthFull:"Septiembre 2026",name:"10K El Ajoguillo 2026",                 muni:"Coamo",                     types:["10k"],      past:false, url:"https://micarrerapr.com/events/2026-09-27-10k-el-ajoguillo-2025" },
+  { day:27, month:"Sep", monthFull:"Septiembre 2026",name:"5K Fun Run El Ajoguillo 2026",          muni:"Coamo",                     types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-09-27-5k-fun-run-el-ajoguillo-2026" },
+  // — Octubre 2026 —
+  { day:3,  month:"Oct", monthFull:"Octubre 2026",  name:"5K del Reloj de Puerto Rico",            muni:"Aibonito",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-03-5k-del-reloj-de-puerto-rico" },
+  { day:4,  month:"Oct", monthFull:"Octubre 2026",  name:"Race for the Cure",                      muni:"San Juan",                  types:["5k"],       past:false, url:"https://running.life/en/event/race-for-the-cure-san-juan" },
+  { day:4,  month:"Oct", monthFull:"Octubre 2026",  name:"Eternal 5K",                             muni:"Isabela",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-04-eternal-5k" },
+  { day:10, month:"Oct", monthFull:"Octubre 2026",  name:"5K Carrera CrediCOOP San Blas",          muni:"Coamo",                     types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-10-4ta-edicion-5k-carrera-credicoop-san-blas" },
+  { day:10, month:"Oct", monthFull:"Octubre 2026",  name:"5K Team Génesis",                        muni:"Ciales",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-10-4ta-edicion-5k-team-genesis" },
+  { day:11, month:"Oct", monthFull:"Octubre 2026",  name:"5K Miles for Smiles",                    muni:"Manatí",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-05-02-5k-miles-for-smiles-pba" },
+  { day:11, month:"Oct", monthFull:"Octubre 2026",  name:"58va Edición Medio Maratón de PR",       muni:"Villalba",                  types:["21k"],      past:false, url:"https://micarrerapr.com/events/2026-10-11-58va-edicion-medio-maraton-de-puerto-rico" },
+  { day:17, month:"Oct", monthFull:"Octubre 2026",  name:"5K Run For Hope 2026",                   muni:"Añasco",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-17-5k-run-for-hope-2026" },
+  { day:17, month:"Oct", monthFull:"Octubre 2026",  name:"Zombie Night Run 5K 2026",               muni:"Arecibo",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-17-zombie-night-run-5k-2026" },
+  { day:18, month:"Oct", monthFull:"Octubre 2026",  name:"5K del Arrecosta'o – 36ta Edición",      muni:"Trujillo Alto",             types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-18-36ta-edicion-5k-del-arrecostao" },
+  { day:18, month:"Oct", monthFull:"Octubre 2026",  name:"5K La Tierra es Nuestra",                muni:"San Juan",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-18-5k-la-tierra-es-nuestra-4ta-edicion" },
+  { day:18, month:"Oct", monthFull:"Octubre 2026",  name:"10K El Criollo",                         muni:"Caguas",                    types:["10k"],      past:false, url:"https://micarrerapr.com/events/2026-10-18-10k-el-criollo" },
+  { day:18, month:"Oct", monthFull:"Octubre 2026",  name:"5K Fajardo Lucha Contra el Cáncer",      muni:"Fajardo",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-18-fajardo-lucha-contra-el-cancer-5k" },
+  { day:25, month:"Oct", monthFull:"Octubre 2026",  name:"Base Ramey 5K",                          muni:"Aguadilla",                 types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-11-base-ramey-5k" },
+  { day:31, month:"Oct", monthFull:"Octubre 2026",  name:"5K Macuya 2026",                         muni:"Coamo",                     types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-06-28-5k-macuya-2026" },
+  { day:31, month:"Oct", monthFull:"Octubre 2026",  name:"5K Trialfesta Night Run 2026",           muni:"Bayamón",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-10-31-5k-trialfesta-night-run-2026" },
+  // — Noviembre 2026 —
+  { day:1,  month:"Nov", monthFull:"Noviembre 2026",name:"5K Dulce Valentía",                      muni:"Yabucoa",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-11-01-2da-edicion-5k-dulce-valentia" },
+  { day:1,  month:"Nov", monthFull:"Noviembre 2026",name:"10K Modesto Carrión 2026",               muni:"Juncos",                    types:["10k"],      past:false, url:"https://micarrerapr.com/events/2026-11-01-10k-modesto-carrion-2026" },
+  { day:6,  month:"Nov", monthFull:"Noviembre 2026",name:"Lola Challenge 5K",                      muni:"San Juan (Viejo San Juan)", types:["5k"],       past:false, url:"https://www.lolachallenge.com/events" },
+  { day:7,  month:"Nov", monthFull:"Noviembre 2026",name:"Lola Challenge 10K",                     muni:"San Juan (Viejo San Juan)", types:["10k"],      past:false, url:"https://www.lolachallenge.com/events" },
+  { day:8,  month:"Nov", monthFull:"Noviembre 2026",name:"Lola Challenge 21K (Half Marathon)",     muni:"San Juan (Viejo San Juan)", types:["21k"],      past:false, url:"https://www.lolachallenge.com/events" },
+  { day:11, month:"Nov", monthFull:"Noviembre 2026",name:"5K Veterans Day Run",                    muni:"Coamo",                     types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-11-11-5k-veterans-day-run" },
+  { day:14, month:"Nov", monthFull:"Noviembre 2026",name:"Encaminada 5K por la Diabetes 2026",     muni:"San Juan",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-11-14-encaminada-5k-por-la-diabetes-2026" },
+  { day:14, month:"Nov", monthFull:"Noviembre 2026",name:"5K Corre y Recicla",                     muni:"Hatillo",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-11-14-5k-corre-y-recicla" },
+  { day:15, month:"Nov", monthFull:"Noviembre 2026",name:"5K Lajas Coop",                          muni:"Lajas",                     types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-11-15-2da-edicion-5k-lajas-coop" },
+  { day:21, month:"Nov", monthFull:"Noviembre 2026",name:"5K Nueva Mujer",                         muni:"Cayey",                     types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-11-21-2da-edicion-5k-nueva-mujer" },
+  { day:22, month:"Nov", monthFull:"Noviembre 2026",name:"Manatí Half Marathon & 5K Fun Run 2026", muni:"Manatí",                    types:["5k","21k"], past:false, url:"https://micarrerapr.com/events/2026-11-22-manati-half-marathon-5k-fun-run-2026" },
+  { day:28, month:"Nov", monthFull:"Noviembre 2026",name:"5K Che Márquez – 32da Edición",          muni:"Toa Baja",                  types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-11-28-32da-edicion-5k-che-marquez" },
+  { day:29, month:"Nov", monthFull:"Noviembre 2026",name:"Medio Maratón Che Márquez – 32da Ed.",   muni:"Toa Baja",                  types:["21k"],      past:false, url:"https://micarrerapr.com/events/2026-11-29-32da-edicion-medio-maraton-che-marquez" },
+  // — Diciembre 2026 —
+  { day:6,  month:"Dic", monthFull:"Diciembre 2026",name:"5K de ESCAPE – Parranda Run",            muni:"Caguas",                    types:["5k"],       past:false, url:"https://running.life/en/event/5k-de-escape-parranda-run" },
+  { day:6,  month:"Dic", monthFull:"Diciembre 2026",name:"Puente Blanco Christmas 10K",            muni:"Quebradillas",              types:["10k"],      past:false, url:"https://micarrerapr.com/events/2026-12-07-puente-blanco-christmas-10k" },
+  { day:12, month:"Dic", monthFull:"Diciembre 2026",name:"5K Jingle Run 2026",                     muni:"Arecibo",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-12-12-5k-jingle-run-2026" },
+  { day:13, month:"Dic", monthFull:"Diciembre 2026",name:"5K Criollo 2026",                        muni:"Caguas",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-12-13-5k-criollo-2026" },
+  { day:13, month:"Dic", monthFull:"Diciembre 2026",name:"10K Reyando en Diciembre",               muni:"Orocovis",                  types:["10k"],      past:false, url:"https://micarrerapr.com/events/2026-12-13-10k-reyando-en-diciembre" },
+  { day:19, month:"Dic", monthFull:"Diciembre 2026",name:"5K La Esperanza 2026",                   muni:"Manatí",                    types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-12-19-5k-la-esperanza-2026" },
+  { day:20, month:"Dic", monthFull:"Diciembre 2026",name:"5K El Potro 2026",                       muni:"Santa Isabel",              types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-12-20-5k-el-potro-2026" },
+  { day:27, month:"Dic", monthFull:"Diciembre 2026",name:"Carrera Fin de Año – Edición 62",        muni:"Isabela",                   types:["5k"],       past:false, url:"https://micarrerapr.com/events/2026-12-27-carrera-fin-de-ano-edicion-62" },
+  { day:27, month:"Dic", monthFull:"Diciembre 2026",name:"10K San Silvestre Puerto Rico",          muni:"San Juan",                  types:["10k"],      past:false, url:"https://maratonespr.com/?tribe_events=10k-san-silvestre-puerto-rico-san-juan" },
 ];
 
 let active = "all";
@@ -362,7 +444,7 @@ function render() {
             <div class="race-meta">${pin()} ${r.muni}</div>
           </div>
           <div class="tags-col">
-            ${r.types.map(t => `<span class="tag tag-${t}">${t.toUpperCase()}</span>`).join("")}
+            ${r.types.map(t => `<span class="tag tag-${t}">${t === 'du' ? 'DU' : t === 'tri' ? 'TRI' : t.toUpperCase()}</span>`).join("")}
           </div>
           <div class="arrow-col">›</div>
         </a>
